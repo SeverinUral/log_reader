@@ -3,15 +3,42 @@
 from datetime import datetime 
 
 def main():
+    # parameter_log_reader()
+    event_log_reader()
+
+def event_log_reader():
     arr = []
 
-    with open('log_param02.txt') as f:
+    with open('logs/log_event00.txt') as f:
+        for lini in f:
+            l = lini.strip().replace(',','.').split('] ')
+            l[0] = l[0].replace('\ufeff', '')
+
+            if len(l[0])<17:
+                l[0] = f'{l[0][0:12]}0{l[0][12:]}'
+
+            print(l[0])
+
+            log = {
+                    "date":datetime.strptime(l[0], "[%d.%m.%Y %H:%M"),
+                    "event":l[1]
+            }
+
+            arr.append(log)
+            
+
+    print(arr)
+
+def parameter_log_reader():
+    arr = []
+
+    with open('logs/log_param02.txt') as f:
         for lini in f:
             l = lini.strip().replace(',','.').split(';')
             l[0] = l[0].replace('\ufeff', '')
 
             if len(l[0])<16:
-                l[0] = f'{l[0][0:11]}0{l[0][11:]}'
+                l[0] = f'{l[0][:11]}0{l[0][11:]}'
 
             log = {
                     "date":datetime.strptime(l[0], "%d.%m.%Y %H:%M"),
@@ -40,7 +67,6 @@ def main():
             arr.append(log)
 
     print(arr)
-
 
 if __name__ == '__main__':
     main()
